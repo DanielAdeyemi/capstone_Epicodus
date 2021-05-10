@@ -1,0 +1,50 @@
+8:15 started CS 50 Web Development with Python and Flask
+https://cs50.harvard.edu/college/2021/spring/weeks/9/
+
+11:00 Flask course at PluralSight
+https://app.pluralsight.com/library/courses/flask-getting-started/table-of-contents
+
+1:15 lunch
+
+2:00 Another flask video from PluralSight
+https://app.pluralsight.com/library/courses/creating-processing-web-forms-flask/table-of-contents
+
+4:30 Leetcode problem https://leetcode.com/problems/count-items-matching-a-rule/
+
+Solution (in C#):
+public class Solution {
+    public int CountMatches(IList<IList<string>> items, string ruleKey, string ruleValue) {
+        int count = 0;
+        if (ruleKey.Equals("type"))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (ruleValue.Equals(items[i][0]))
+                {
+                    count++;
+                }
+            }
+        }
+        else if (ruleKey.Equals("color"))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (ruleValue.Equals(items[i][1]))
+                {
+                    count++;
+                }
+            }
+        }
+        else if (ruleKey.Equals("name"))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (ruleValue.Equals(items[i][2]))
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
