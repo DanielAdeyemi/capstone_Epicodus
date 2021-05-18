@@ -13,7 +13,6 @@
 * Flask
 * JavaScript ES6
 * Bootstrap
-* C# v.9(?)
 * SQL
 
 
