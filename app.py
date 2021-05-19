@@ -2,10 +2,12 @@ import os
 
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
+from flask_wtf import FlaskForm
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from wtforms.fields.simple import SubmitField
 
 from helpers import apology, login_required
 
@@ -32,6 +34,8 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///refs.db")
 
+class DeleteRefForm(FlaskForm):
+  submit=SubmitField("Remove this ref")
 
 @app.route("/")
 @login_required
