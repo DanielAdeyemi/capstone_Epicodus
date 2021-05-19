@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% set active_page = 'home' %}
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block main %}
+        <div class="alert alert-primary" role="alert"> Current rating</div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Level</th>
+                    <th scope="col">Average score</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            {% if rating %}
+        <tbody>
+            {% for rate in rating %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ rate.name }}</td>
+                <td>{{ rate.level }}</td>
+                <td>{{ rate.score }} </td>
+                <td> <button class="btn btn-success">Edit</button> </td>
+                <td>     
+                  <form class="delete-form" method="POST" action="{{ url_for('delete_ref', ref_id=rank.id) }}">
+                  {{ deleteItemForm.hidden_tag() }}
+                  {{ deleteItemForm.submit(class="btn btn-danger", onclick="return confirm('Are you sure you want to delete this ref?');") }}
+                  </form> 
+                </td>
+            </tr>
+            <!-- <tr>
+                <td colspan="4" class="table-active">
+                    <div class="accordion" id="accordionExample">
+                      <div class="accordion-item">
+                <h4 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" collapsed>
+        Comments
+      </button>
+    </h4>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        {{ rate.comments }}
+      </div>
+    </div>
+  </div>
+                </td>
+            </tr> -->
+            {% endfor %}
+
+            </tr>
+        </tbody>
+        {% else %}
+        <h4>Nothing to display</h4>
+        {% endif %}
+        </table>
+
+{% endblock %}
