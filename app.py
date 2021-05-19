@@ -65,11 +65,11 @@ def login():
                       username=request.form.get("username"))
 
     # Ensure username exists and password is correct
-    if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+    if len(rows) != 1 or not check_password_hash(rows[0]["password"], request.form.get("password")):
       return render_template("sorry.html", message="Wrong username or password")
 
     # Remember which user has logged in
-    session["user_id"] = rows[0]["id"]
+    session["user_id"] = rows[0]["user_id"]
 
     # Redirect user to home page
     return redirect("/")
@@ -109,6 +109,6 @@ def register():
     if len(rows) == 1:
       return render_template("sorry.html", message="This username already exists")
     else:
-      db.execute("INSERT INTO users(username, hash) VALUES(?, ?)", request.form.get(
+      db.execute("INSERT INTO users(username, password) VALUES(?, ?)", request.form.get(
                 "username"), generate_password_hash(request.form.get("password")))
       return redirect("/login")
