@@ -1,0 +1,137 @@
+{% extends "layout.html" %} 
+{% block title %} Ranking {% endblock %}
+ {% block main %}
+<form action="/rank" method="post">
+	<div class="row mb-4">
+		<div class="col-sm-6">
+			<input
+				autocomplete="off"
+				autofocus
+				class="form-control"
+				name="name"
+				placeholder="Official's name"
+				type="text"
+				required
+			/>
+		</div>
+		<div class="col-sm-6">
+			<input
+				autocomplete="off"
+				class="form-control"
+				name="level"
+				placeholder="Level of officiating"
+				type="text"
+				required
+			/>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="row mb-5">
+			<label for="pc" class="col-sm-2 col-form-label">Play Calling</label>
+			<div class="col-sm-2">
+				<input
+					autocomplete="off"
+					class="form-control"
+					name="pc"
+					placeholder="PC grade"
+					type="number"
+					min="1"
+					max="5"
+					step=".1"
+					required
+				/>
+			</div>
+			<label for="mec" class="col-sm-1 col-form-label">Mechanics</label>
+			<div class="col-sm-2">
+				<input
+					autocomplete="off"
+					class="form-control"
+					name="mec"
+					placeholder="Mec grade"
+					type="number"
+					min="1"
+					max="5"
+					step=".1"
+					required
+				/>
+			</div>
+			<label for="gm" class="col-sm-2 col-form-label">Game Management</label>
+			<div class="col-sm-2">
+				<input
+					autocomplete="off"
+					class="form-control"
+					name="gm"
+					placeholder="GM grade"
+					type="number"
+					min="1"
+					max="5"
+					step=".1"
+					required
+				/>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<label for="com" class="col-sm-1.5 col-form-label">Communication</label>
+			<div class="col-sm-2">
+				<input
+					autocomplete="off"
+					class="form-control"
+					name="com"
+					placeholder="Com grade"
+					type="number"
+					min="1"
+					max="5"
+					step=".1"
+					required
+				/>
+			</div>
+			<label for="atyp" class="col-sm-2 col-form-label"
+				>Atypical situations</label
+			>
+			<div class="col-sm-2">
+				<input
+					autocomplete="off"
+					class="form-control"
+					name="aty"
+					placeholder="AtSit grade"
+					type="number"
+					min="1"
+					max="5"
+					step=".1"
+					required
+				/>
+			</div>
+			<label for="gen" class="col-sm-2 col-form-label"
+				>Overall appearance</label
+			>
+			<div class="col-sm-2">
+				<input
+					autocomplete="off"
+					class="form-control"
+					name="gen"
+					placeholder="Appearance"
+					type="number"
+					min="1"
+					max="5"
+					step=".1"
+					required
+				/>
+			</div>
+		</div>
+	</div>
+	<div class="mb-3">
+		<label for="exampleFormControlTextarea1" class="form-label"
+			>Comments:</label
+		>
+		<textarea
+			class="form-control"
+			name="comments"
+			id="comments"
+			rows="3"
+			placeholder="Comments"
+			required
+		></textarea>
+	</div>
+	<button class="btn btn-primary" type="submit">Submit Grading</button>
+</form>
+{% endblock %}
