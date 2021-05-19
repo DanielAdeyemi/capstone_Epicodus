@@ -12,6 +12,7 @@ from wtforms.fields.simple import SubmitField
 from helpers import apology, login_required
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "secretkey"
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -42,7 +43,8 @@ class DeleteRefForm(FlaskForm):
 def index():
   """Show rating of refs"""
   rating = db.execute("SELECT * FROM rank ORDER BY score DESC")
-  return render_template("index.html", rating=rating)
+  deleteRefForm = DeleteRefForm()
+  return render_template("index.html", rating=rating, deleteRefForm=deleteRefForm)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -193,6 +195,11 @@ def rank():
       "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)
   return render_template("sorry.html", message=new)
 
+
+@app.route("/ref/<ref_id>/delete", methods=["POST"])
+def delete_ref(ref_id):
+  db.execute("DELETE FROM rank WHERE id = ?", (ref_id))
+  return redirect(url_for("index"))
 
 def errorhandler(e):
   """Handle error"""

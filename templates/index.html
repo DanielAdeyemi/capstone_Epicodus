@@ -28,11 +28,11 @@
                 <td>{{ rate.name }}</td>
                 <td>{{ rate.level }}</td>
                 <td>{{ rate.score }} </td>
-                <td> <button class="btn btn-success">Edit</button> </td>
+                <td> <button class="btn btn-success" onclick="alert('{{ rate.comments}}')">Comments</button> </td>
                 <td>     
-                  <form class="delete-form" method="POST" action="{{ url_for('delete_ref', ref_id=rank.id) }}">
-                  {{ deleteItemForm.hidden_tag() }}
-                  {{ deleteItemForm.submit(class="btn btn-danger", onclick="return confirm('Are you sure you want to delete this ref?');") }}
+                  <form class="delete-form" method="POST" action="{{ url_for('delete_ref', ref_id=rate.id) }}">
+                  {{ deleteRefForm.hidden_tag() }}
+                  {{ deleteRefForm.submit(class="btn btn-danger", onclick="return confirm('Are you sure you want to delete this ref?');") }}
                   </form> 
                 </td>
             </tr>
@@ -56,9 +56,9 @@
             {% endfor %}
 
             </tr>
+            {% else %}
+            <h4>Nothing to display</h4>
         </tbody>
-        {% else %}
-        <h4>Nothing to display</h4>
         {% endif %}
         </table>
 
