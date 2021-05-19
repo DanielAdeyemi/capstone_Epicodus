@@ -39,7 +39,7 @@ class DeleteRefForm(FlaskForm):
   submit=SubmitField("Remove this ref")
 
 @app.route("/")
-@login_required
+# @login_required
 def index():
   """Show rating of refs"""
   rating = db.execute("SELECT * FROM rank ORDER BY score DESC")
@@ -168,35 +168,38 @@ def rank():
     new = db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                      name, level, pc, mec, gm, com, aty, gen, score, comments)
     return redirect(url_for("index"))
-  yes = exist[0]
+  
+  return redirect(url_for("index"))
+  # yes = exist[0]
 
-  if yes['level'] == level:
-    existed = db.execute(
-              "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)[0]
-    id_c = existed['id']
-    pc_new = (existed['pc'] + pc) / 2
-    mec_new = (existed['mec'] + mec) / 2
-    gm_new = (existed['gm'] + gm) / 2
-    com_new = (existed['com'] + com) / 2
-    atyp_new = (existed['atyp'] + aty) / 2
-    gen_new = (existed['gen'] + gen) / 2
-    score_new = round((existed['score'] + score) / 2, 3)
-    comments_old = existed['comments']
-    comments_new = comments_old + " /r " + comments
+  # if yes['level'] == level:
+  #   existed = db.execute(
+  #             "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)[0]
+  #   id_c = existed['id']
+  #   pc_new = (existed['pc'] + pc) / 2
+  #   mec_new = (existed['mec'] + mec) / 2
+  #   gm_new = (existed['gm'] + gm) / 2
+  #   com_new = (existed['com'] + com) / 2
+  #   atyp_new = (existed['atyp'] + aty) / 2
+  #   gen_new = (existed['gen'] + gen) / 2
+  #   score_new = round((existed['score'] + score) / 2, 3)
+  #   comments_old = existed['comments']
+  #   comments_new = comments_old + " /r " + comments
 
-    db.execute("UPDATE rank SET pc = ?, mec = ?, gm = ?, com = ?, atyp = ?, gen = ?, score = ?, comments = ?  WHERE name = ? AND level = ?",
-               pc_new, mec_new, gm_new, com_new, atyp_new, gen_new, score_new, comments_new, name, level)
+  #   db.execute("UPDATE rank SET pc = ?, mec = ?, gm = ?, com = ?, atyp = ?, gen = ?, score = ?, comments = ?  WHERE name = ? AND level = ?",
+  #              pc_new, mec_new, gm_new, com_new, atyp_new, gen_new, score_new, comments_new, name, level)
 
-    return render_template("sorry.html", message=comments_new)
+  #   return render_template("sorry.html", message=comments_new)
 
-  db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            name, level, pc, mec, gm, com, aty, gen, score, comments)
-  new = db.execute(
-      "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)
-  return render_template("sorry.html", message=new)
+  # db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  #           name, level, pc, mec, gm, com, aty, gen, score, comments)
+  # new = db.execute(
+  #     "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)
+  # return render_template("sorry.html", message=new)
 
 
 @app.route("/ref/<ref_id>/delete", methods=["POST"])
+@login_required
 def delete_ref(ref_id):
   db.execute("DELETE FROM rank WHERE id = ?", (ref_id))
   return redirect(url_for("index"))

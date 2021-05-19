@@ -15,9 +15,10 @@
                     <th scope="col">Name</th>
                     <th scope="col">Level</th>
                     <th scope="col">Average score</th>
+                    {% if session.user_id %}
                     <th scope="col"></th>
                     <th scope="col"></th>
-
+                  {% endif %}
                 </tr>
             </thead>
             {% if rating %}
@@ -28,6 +29,7 @@
                 <td>{{ rate.name }}</td>
                 <td>{{ rate.level }}</td>
                 <td>{{ rate.score }} </td>
+                {% if session.user_id %}
                 <td> <button class="btn btn-success" onclick="alert('{{ rate.comments}}')">Comments</button> </td>
                 <td>     
                   <form class="delete-form" method="POST" action="{{ url_for('delete_ref', ref_id=rate.id) }}">
@@ -35,6 +37,7 @@
                   {{ deleteRefForm.submit(class="btn btn-danger", onclick="return confirm('Are you sure you want to delete this ref?');") }}
                   </form> 
                 </td>
+                {% endif %}
             </tr>
             <!-- <tr>
                 <td colspan="4" class="table-active">
