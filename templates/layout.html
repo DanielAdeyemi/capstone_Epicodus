@@ -38,8 +38,8 @@
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.user_id %}
                     <ul class="navbar-nav mr-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/rank">Rank</a></li>
+                        <li class="nav-item {{ 'active' if active_page == 'home' else '' }}"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item {{ 'active' if active_page == 'ranks' else '' }}"><a class="nav-link" href="/rank">Rank</a></li>
 
                     </ul>
 
@@ -47,13 +47,13 @@
                     <img src="/static/logo.jpg"  >
 
                     <ul class="navbar-nav ml-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/change">Change password</a></li>
+                        <li class="nav-item {{ 'active' if active_page == 'change' else '' }}"><a class="nav-link" href="/change">Change password</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                 {% else %}
                     <ul class="navbar-nav ml-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                        <li class="nav-item {{ 'active' if active_page == 'register' else '' }}"><a class="nav-link" href="/register">Register</a></li>
+                        <li class="nav-item {{ 'active' if active_page == 'login' else '' }}"><a class="nav-link" href="/login">Log In</a></li>
                     </ul>
                 {% endif %}
             </div>

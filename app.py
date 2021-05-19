@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -37,7 +37,8 @@ db = SQL("sqlite:///refs.db")
 @login_required
 def index():
   """Show rating of refs"""
-  return render_template("sorry.html", message="TODO")
+  rating = db.execute("SELECT * FROM rank ORDER BY score DESC")
+  return render_template("index.html", rating=rating)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -160,7 +161,7 @@ def rank():
   if not exist:
     new = db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                      name, level, pc, mec, gm, com, aty, gen, score, comments)
-    return render_template("sorry.html", message=new)
+    return redirect(url_for("index"))
   yes = exist[0]
 
   if yes['level'] == level:

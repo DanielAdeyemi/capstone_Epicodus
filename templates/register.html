@@ -1,5 +1,10 @@
-{% extends "layout.html" %} {% block title %} Registration {% endblock %} {%
-block main %}
+{% extends "layout.html" %} 
+
+{% set active_page = 'register' %}
+
+{% block title %} Registration {% endblock %} 
+
+{%block main %}
 <form action="/register" method="post">
 	<div class="form-group">
 		<input
