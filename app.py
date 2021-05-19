@@ -133,8 +133,8 @@ def change():
                       session["user_id"])
     if not check_password_hash(rows[0]["password"], request.form.get("old")):
       return apology("Old password incorrect", 403)
-    if not check_password_hash(rows[0]["hash"], request.form.get("password")):
-      db.execute("UPDATE users SET hash = ? WHERE id = ?", generate_password_hash(
+    if not check_password_hash(rows[0]["password"], request.form.get("password")):
+      db.execute("UPDATE users SET password = ? WHERE user_id = ?", generate_password_hash(
                 request.form.get("password")), session["user_id"])
       return redirect("/logout")
     return apology("New password is same as old one", 403)
