@@ -112,3 +112,29 @@ def register():
       db.execute("INSERT INTO users(username, password) VALUES(?, ?)", request.form.get(
                 "username"), generate_password_hash(request.form.get("password")))
       return redirect("/login")
+
+
+@app.route("/change", methods=["GET", "POST"])
+@login_required
+def change():
+  if request.method == "GET":
+    return render_template("change.html")
+  else:
+    if not request.form.get("old"):
+      return apology("Please, provide old password", 403)
+    elif not request.form.get("password"):
+      return apology("Provide new password", 403)
+    elif not request.form.get("password_2"):
+      return apology("Confirm new password", 403)
+    elif request.form.get("password") != request.form.get("password_2"):
+      return apology("Passwords don't match", 403)
+
+    rows = db.execute("SELECT * FROM users WHERE user_id = ?",
+                      session["user_id"])
+    if not check_password_hash(rows[0]["password"], request.form.get("old")):
+      return apology("Old password incorrect", 403)
+    if not check_password_hash(rows[0]["hash"], request.form.get("password")):
+      db.execute("UPDATE users SET hash = ? WHERE id = ?", generate_password_hash(
+                request.form.get("password")), session["user_id"])
+      return redirect("/logout")
+    return apology("New password is same as old one", 403)
