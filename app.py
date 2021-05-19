@@ -138,3 +138,54 @@ def change():
                 request.form.get("password")), session["user_id"])
       return redirect("/logout")
     return apology("New password is same as old one", 403)
+
+
+@app.route("/rank", methods=["GET", "POST"])
+@login_required
+def rank():
+  if request.method == "GET":
+    return render_template("ranks.html")
+
+  name = request.form.get("name")
+  level = request.form.get("level")
+  pc = float(request.form.get("pc"))
+  mec = float(request.form.get("mec"))
+  gm = float(request.form.get("gm"))
+  com = float(request.form.get("com"))
+  aty = float(request.form.get("aty"))
+  gen = float(request.form.get("gen"))
+  comments = request.form.get("comments")
+  score = round(pc + mec + gm + com + aty + gen, 3)
+
+  exist = db.execute("SELECT * FROM rank WHERE name = ?", name)
+
+  if not exist:
+    new = db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                     name, level, pc, mec, gm, com, aty, gen, score, comments)
+    return render_template("sorry.html", message=new)
+  yes = exist[0]
+
+  if yes['level'] == level:
+    existed = db.execute(
+              "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)[0]
+    id_c = existed['id']
+    pc_new = (existed['pc'] + pc) / 2
+    mec_new = (existed['mec'] + mec) / 2
+    gm_new = (existed['gm'] + gm) / 2
+    com_new = (existed['com'] + com) / 2
+    atyp_new = (existed['atyp'] + aty) / 2
+    gen_new = (existed['gen'] + gen) / 2
+    score_new = round((existed['score'] + score) / 2, 3)
+    comments_old = existed['comments']
+    comments_new = comments_old + " /r " + comments
+
+    db.execute("UPDATE rank SET pc = ?, mec = ?, gm = ?, com = ?, atyp = ?, gen = ?, score = ?, comments = ?  WHERE name = ? AND level = ?",
+               pc_new, mec_new, gm_new, com_new, atyp_new, gen_new, score_new, comments_new, name, level)
+
+    return render_template("sorry.html", message=comments_new)
+
+  db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            name, level, pc, mec, gm, com, aty, gen, score, comments)
+  new = db.execute(
+      "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)
+  return render_template("sorry.html", message=new)
