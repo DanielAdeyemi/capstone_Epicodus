@@ -162,22 +162,45 @@ def rank():
   comments = request.form.get("comments")
   score = round(pc + mec + gm + com + aty + gen, 3)
 
-  exist = db.execute("SELECT * FROM rank WHERE name = ?", name)
+  exist = db.execute("SELECT * FROM rank WHERE name = ?", name)[0]
 
   if not exist:
     new = db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                      name, level, pc, mec, gm, com, aty, gen, score, comments)
     return redirect(url_for("index"))
   
-  return redirect(url_for("edit_rank"))
+  return redirect(url_for("edit_rank", ref_id=exist.id))
 
 @app.route("/rank/<ref_id>/edit", methods=["GET", "POST"])
 @login_required
 def edit_rank(ref_id):
+  ref = db.execute("SELECT * FROM rank WHERE id = ?", ref_id)[0]
   if request.method == "GET":
-    name = db.execute("SELECT name FROM rank WHERE id = ?", ref_id)[0]
-    return render_template("edit.html", name=name)
-  return render_template("sorry.html")
+    return render_template("edit.html", ref=ref)
+  
+  level = request.form.get("level")
+  pc = float(request.form.get("pc"))
+  mec = float(request.form.get("mec"))
+  gm = float(request.form.get("gm"))
+  com = float(request.form.get("com"))
+  aty = float(request.form.get("aty"))
+  gen = float(request.form.get("gen"))
+  comments = request.form.get("comments")
+  score = round(pc + mec + gm + com + aty + gen, 3)
+
+  pc_new = (ref['pc'] + pc) / 2
+  mec_new = (ref['mec'] + mec) / 2
+  gm_new = (ref['gm'] + gm) / 2
+  com_new = (ref['com'] + com) / 2
+  atyp_new = (ref['atyp'] + aty) / 2
+  gen_new = (ref['gen'] + gen) / 2
+  score_new = round((ref['score'] + score) / 2, 3)
+  comments_old = ref['comments']
+  comments_new = comments_old + " /n " + comments
+  db.execute("UPDATE rank SET level = ?, pc = ?, mec = ?, gm = ?, com = ?, atyp = ?, gen = ?, score = ?, comments = ?  WHERE id = ?",
+            level, pc_new, mec_new, gm_new, com_new, atyp_new, gen_new, score_new, comments_new, ref_id)
+
+  return redirect(url_for("index"))
 
 
 

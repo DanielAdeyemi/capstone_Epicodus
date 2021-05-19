@@ -6,9 +6,9 @@
 
 {% block main %}
 
-<form action="/rank" method="post">
+<form action="{{ url_for('edit_rank', ref_id=ref.id) }}" method="post">
 	<div class="row mb-4">
-		<div class="col-sm-6"> <b>Name: </b> {{ name.name }}</div>
+		<div class="col-sm-6"> <b>Name: </b> {{ ref.name }}</div>
 		<div class="col-sm-6">
 			<input autocomplete="off" class="form-control" name="level" placeholder="Level of officiating" type="text" required />
 		</div>
