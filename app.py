@@ -169,7 +169,18 @@ def rank():
                      name, level, pc, mec, gm, com, aty, gen, score, comments)
     return redirect(url_for("index"))
   
-  return redirect(url_for("index"))
+  return redirect(url_for("edit_rank"))
+
+@app.route("/rank/<ref_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_rank(ref_id):
+  if request.method == "GET":
+    name = db.execute("SELECT name FROM rank WHERE id = ?", ref_id)[0]
+    return render_template("edit.html", name=name)
+  return render_template("sorry.html")
+
+
+
   # yes = exist[0]
 
   # if yes['level'] == level:
