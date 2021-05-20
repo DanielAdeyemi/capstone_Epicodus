@@ -162,14 +162,16 @@ def rank():
   comments = request.form.get("comments")
   score = round(pc + mec + gm + com + aty + gen, 3)
 
-  exist = db.execute("SELECT * FROM rank WHERE name = ?", name)[0]
-
-  if not exist:
+  try:
+    exist = db.execute("SELECT * FROM rank WHERE name = ?", name)[0]
+    return redirect(url_for("edit_rank", ref_id=exist.id))
+  except:
+    exist = {}
+  if exist == {}:
     new = db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                      name, level, pc, mec, gm, com, aty, gen, score, comments)
     return redirect(url_for("index"))
   
-  return redirect(url_for("edit_rank", ref_id=exist.id))
 
 @app.route("/rank/<ref_id>/edit", methods=["GET", "POST"])
 @login_required
@@ -196,41 +198,17 @@ def edit_rank(ref_id):
   gen_new = (ref['gen'] + gen) / 2
   score_new = round((ref['score'] + score) / 2, 3)
   comments_old = ref['comments']
-  comments_new = comments_old + " /n " + comments
+  comments_new = comments_old + "/r" + comments
   db.execute("UPDATE rank SET level = ?, pc = ?, mec = ?, gm = ?, com = ?, atyp = ?, gen = ?, score = ?, comments = ?  WHERE id = ?",
             level, pc_new, mec_new, gm_new, com_new, atyp_new, gen_new, score_new, comments_new, ref_id)
 
   return redirect(url_for("index"))
 
-
-
-  # yes = exist[0]
-
-  # if yes['level'] == level:
-  #   existed = db.execute(
-  #             "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)[0]
-  #   id_c = existed['id']
-  #   pc_new = (existed['pc'] + pc) / 2
-  #   mec_new = (existed['mec'] + mec) / 2
-  #   gm_new = (existed['gm'] + gm) / 2
-  #   com_new = (existed['com'] + com) / 2
-  #   atyp_new = (existed['atyp'] + aty) / 2
-  #   gen_new = (existed['gen'] + gen) / 2
-  #   score_new = round((existed['score'] + score) / 2, 3)
-  #   comments_old = existed['comments']
-  #   comments_new = comments_old + " /r " + comments
-
-  #   db.execute("UPDATE rank SET pc = ?, mec = ?, gm = ?, com = ?, atyp = ?, gen = ?, score = ?, comments = ?  WHERE name = ? AND level = ?",
-  #              pc_new, mec_new, gm_new, com_new, atyp_new, gen_new, score_new, comments_new, name, level)
-
-  #   return render_template("sorry.html", message=comments_new)
-
-  # db.execute("INSERT INTO rank(name, level, pc, mec, gm, com, atyp, gen, score, comments) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-  #           name, level, pc, mec, gm, com, aty, gen, score, comments)
-  # new = db.execute(
-  #     "SELECT * FROM rank WHERE name = ? AND level = ?", name, level)
-  # return render_template("sorry.html", message=new)
-
+@app.route("/rank/<ref_id>/comments")
+def comments(ref_id):
+  ref = db.execute("SELECT comments FROM rank WHERE id = ?", ref_id)
+  
+  return render_template("comments.html",refs=ref)
 
 @app.route("/ref/<ref_id>/delete", methods=["POST"])
 @login_required

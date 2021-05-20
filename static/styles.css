@@ -50,3 +50,7 @@ main img
     display: block;
     text-align: center;
 }
+
+ul>li {
+  list-style-type: 👍🏾;
+}

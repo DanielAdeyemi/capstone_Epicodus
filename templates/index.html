@@ -31,7 +31,8 @@
                 <td>{{ rate.level }}</td>
                 <td>{{ rate.score }} </td>
                 {% if session.user_id %}
-                <td> <button class="btn btn-success" onclick='alert("{{ rate.comments}}" )'>Comments</button> </td>
+                <td><a href="{{ url_for('comments', ref_id=rate.id) }}" class="btn btn-success">Comments</a></td>
+                <!-- <td> <button class="btn btn-success" onclick='alert("{{ rate.comments}}" )'>Comments</button> </td> -->
                 <td><a href="{{ url_for('edit_rank', ref_id=rate.id) }}" class="btn btn-secondary">Edit info</a></td>
                 <td>     
                   <form class="delete-form" method="POST" action="{{ url_for('delete_ref', ref_id=rate.id) }}">
