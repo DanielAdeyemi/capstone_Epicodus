@@ -9,11 +9,13 @@
 ***Application for referees and assignors to create rank of officials based on their performance***
 
 ## <div align="center"> 🛠️ *Technologies used:*
-* Python
-* Flask
+* Python v.3.9.5
+* Flask v.2.0
+* Jinja2 v.3.0.1
 * JavaScript ES6
-* Bootstrap
-* SQL
+* Bootstrap v.4.6.0
+* SQLite 3
+* HTML, CSS
 
 
 

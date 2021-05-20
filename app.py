@@ -7,7 +7,8 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from wtforms.fields.simple import SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, SelectField, FloatField
+from wtforms.validators import InputRequired, DataRequired, Length
 
 from helpers import apology, login_required
 
@@ -34,6 +35,18 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///refs.db")
+
+class RaitingForm(FlaskForm):
+  name = StringField("name", validators=[InputRequired("Name is required"), DataRequired("No empty tricks!"), Length(min=1, max=50, message="Name should be 1 to 50 characters long")])
+  level= StringField("level", validators=[InputRequired("This field is required"), DataRequired("No empty tricks!"), Length(min=1, max=50, message="Level should be 2 to 50 characters long")])
+  pc = FloatField("pc")
+  mec = FloatField("mec")
+  gm = FloatField("gm")
+  com = FloatField("com")
+  aty = FloatField("aty")
+  gen = FloatField("gen")
+  comments = TextAreaField("comments", validators=[InputRequired("Anything for this ref?"), DataRequired("No empty tricks!"), Length(min=5, max=200, message="Between 5 and 200 charachters")])
+  submit=SubmitField("Rate him!")
 
 class DeleteRefForm(FlaskForm):
   submit=SubmitField("Remove this ref")
@@ -205,6 +218,7 @@ def edit_rank(ref_id):
   return redirect(url_for("index"))
 
 @app.route("/rank/<ref_id>/comments")
+@login_required
 def comments(ref_id):
   ref = db.execute("SELECT comments FROM rank WHERE id = ?", ref_id)
   
